@@ -66,6 +66,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { getLoginInfo } from '../session'
 
 const router = useRouter()
 const allUsers = ref([])
@@ -81,14 +82,6 @@ function goBack() {
 
 function gotoChat() {
   router.push('/consult/chat')
-}
-
-function getLoginInfo() {
-  const userId = sessionStorage.getItem('userId')
-  const username = sessionStorage.getItem('username')
-  const role = sessionStorage.getItem('role')
-  if (!userId || userId === 'undefined' || userId === 'null') return null
-  return { userId: parseInt(userId), username: username || '', role: role || '' }
 }
 
 function roleText(role) {

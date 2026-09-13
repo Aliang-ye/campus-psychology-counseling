@@ -213,13 +213,8 @@ public class AssessmentController {
             response.put("success", true);
             response.put("totalScore", totalScore);
             response.put("recordId", recordId);
-            response.put("dimensionScores", new HashMap<String, Integer>() {{
-                put("学业压力", dimensionScores.get("学业压力"));
-                put("宿舍关系", dimensionScores.get("宿舍关系"));
-                put("考试焦虑", dimensionScores.get("考试焦虑"));
-                put("就业压力", dimensionScores.get("就业压力"));
-                put("恋爱问题", dimensionScores.get("恋爱问题"));
-            }});
+            Map<String, Integer> persistedDimensionScores = new HashMap<>(dimensionScores);
+            response.put("dimensionScores", persistedDimensionScores);
             response.put("message", "测评已提交，正在生成建议...");
             return response;
         } catch (Exception e) {

@@ -20,4 +20,10 @@ public class AuthExceptionHandler {
     public Map<String, Object> handleForbidden(ForbiddenException e) {
         return Map.of("success", false, "message", e.getMessage());
     }
+
+    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleBadRequest(RuntimeException e) {
+        return Map.of("success", false, "message", e.getMessage());
+    }
 }

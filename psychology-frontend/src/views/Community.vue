@@ -248,10 +248,10 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { getLoginInfo } from '../session'
 
 const router = useRouter()
 
-// 动态获取登录信息，避免在模块加载时数据还没保存的问题
 let username = null
 let role = null
 let userId = null
@@ -259,26 +259,11 @@ let userId = null
 const activeTab = ref('list')
 
 onMounted(() => {
-  // 在组件挂载时获取最新的值
-  // use sessionStorage for tab-isolated identity
-  username = sessionStorage.getItem('username')
-  role = sessionStorage.getItem('role')
-  userId = sessionStorage.getItem('userId')
-  
-  console.log('=== Community.vue 组件挂载 ===')
-  console.log('sessionStorage 中的数据:')
-  console.log('  username:', username)
-  console.log('  role:', role)
-  console.log('  userId:', userId)
-  console.log('================')
-  
-  // 确保userId是有效的数字
-  if (!userId || userId === 'undefined' || userId === 'null') {
-    userId = null
-  } else {
-    userId = parseInt(userId)
-  }
-  
+  const info = getLoginInfo()
+  username = info ? info.username : null
+  role = info ? info.role : null
+  userId = info ? info.userId : null
+
   if (!username) {
     router.push('/login')
   } else {
@@ -351,15 +336,6 @@ async function loadPosts() {
   }
 }
 
-// 获取最新的登录信息
-function getLoginInfo() {
-  return {
-    username: sessionStorage.getItem('username'),
-    role: sessionStorage.getItem('role'),
-    userId: sessionStorage.getItem('userId')
-  }
-}
-
 async function publishPost() {
   msgPublish.value = ''
   if (!newPost.title.trim() || !newPost.content.trim()) {
@@ -367,7 +343,7 @@ async function publishPost() {
     return
   }
 
-  const loginInfo = getLoginInfo()
+  const loginInfo = getLoginInfo() || {}
   const { userId: uid, username: uname, role: urole } = loginInfo
 
   if (!uid || uid === 'undefined' || uid === 'null') {
@@ -423,7 +399,7 @@ async function publishPost() {
 async function deletePost(post) {
   if (!confirm('确认删除此帖子吗？')) return
 
-  const { userId: uid, role: urole } = getLoginInfo()
+  const { userId: uid, role: urole } = getLoginInfo() || {}
   if (!uid || !urole) {
     msgPosts.value = '请先登录'
     return
@@ -447,7 +423,7 @@ async function deletePost(post) {
 
 async function loadPendingPosts() {
   msgAudit.value = ''
-  const { role: urole } = getLoginInfo()
+  const { role: urole } = getLoginInfo() || {}
   if (!urole || urole !== 'admin') {
     msgAudit.value = '无权限'
     return
@@ -472,7 +448,7 @@ async function loadPendingPosts() {
 
 async function auditPost(post, action) {
   msgAudit.value = ''
-  const { role: urole } = getLoginInfo()
+  const { role: urole } = getLoginInfo() || {}
   if (!urole || urole !== 'admin') {
     msgAudit.value = '无权限'
     return
@@ -503,7 +479,7 @@ async function auditPost(post, action) {
 }
 
 async function togglePin(post) {
-  const { role: urole } = getLoginInfo()
+  const { role: urole } = getLoginInfo() || {}
   if (!urole) {
     msgPosts.value = '请先登录'
     return
@@ -526,7 +502,7 @@ async function togglePin(post) {
 }
 
 async function toggleLock(post) {
-  const { role: urole } = getLoginInfo()
+  const { role: urole } = getLoginInfo() || {}
   if (!urole) {
     msgPosts.value = '请先登录'
     return
@@ -585,7 +561,7 @@ async function publishReply() {
     return
   }
 
-  const { userId: uid, username: uname, role: urole } = getLoginInfo()
+  const { userId: uid, username: uname, role: urole } = getLoginInfo() || {}
   if (!uid || !uname || !urole) {
     msgReply.value = '请先登录'
     return
@@ -614,7 +590,7 @@ async function publishReply() {
 async function deleteReply(reply) {
   if (!confirm('确认删除此回复吗？')) return
 
-  const { userId: uid, role: urole } = getLoginInfo()
+  const { userId: uid, role: urole } = getLoginInfo() || {}
   if (!uid || !urole) {
     msgReply.value = '请先登录'
     return

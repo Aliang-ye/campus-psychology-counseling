@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import './apiClient'
+import { isLoggedIn } from './session'
 import Login from './views/Login.vue'
 import Main from './views/Main.vue'
 import Profile from './views/Profile.vue'
@@ -47,8 +48,7 @@ router.beforeEach((to, from, next) => {
     next()
     return
   }
-  const token = sessionStorage.getItem('token')
-  if (!token) {
+  if (!isLoggedIn()) {
     next('/login')
     return
   }

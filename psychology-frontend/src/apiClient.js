@@ -1,3 +1,5 @@
+import { clearLoginSession } from './session'
+
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '')
 
 export function apiUrl(path = '') {
@@ -31,7 +33,7 @@ export async function apiFetch(path, options = {}) {
   }
   const response = await fetch(apiUrl(path), { ...options, headers })
   if (response.status === 401) {
-    sessionStorage.removeItem('token')
+    clearLoginSession()
     if (!window.location.pathname.startsWith('/login')) {
       window.location.href = '/login'
     }
@@ -60,7 +62,7 @@ if (typeof window !== 'undefined' && !window.__AUTH_FETCH_PATCHED__) {
     }
     return originalFetch(input, { ...init, headers }).then(response => {
       if (response.status === 401) {
-        sessionStorage.removeItem('token')
+        clearLoginSession()
         if (!window.location.pathname.startsWith('/login')) {
           window.location.href = '/login'
         }

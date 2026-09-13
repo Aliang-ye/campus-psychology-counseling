@@ -22,6 +22,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { apiUrl } from '../apiClient'
+import { saveLoginSession } from '../session'
 
 const router = useRouter()
 const isLogin = ref(true)
@@ -60,27 +61,7 @@ async function handleSubmit() {
       message.value = (isLogin.value ? '登录成功，用户类型：' : '注册成功，用户类型：') + data.role
       console.log('=== 登录/注册成功 ===')
       
-      // 使用 sessionStorage 存储标签页级别的身份信息，避免多标签覆盖
-      let tabId = sessionStorage.getItem('tabId')
-      if (!tabId) {
-        try { 
-          tabId = self.crypto ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)
-        } catch (e) { 
-          tabId = Date.now().toString(36) + Math.random().toString(36).slice(2) 
-        }
-        sessionStorage.setItem('tabId', tabId)
-      }
-      
-      sessionStorage.setItem('username', form.value.username)
-      sessionStorage.setItem('role', data.role)
-      sessionStorage.setItem('userId', data.userId || '')
-      if (data.token) sessionStorage.setItem('token', data.token)
-      
-      console.log('sessionStorage 中现在的值:')
-      console.log('  username:', sessionStorage.getItem('username'))
-      console.log('  role:', sessionStorage.getItem('role'))
-      console.log('  userId:', sessionStorage.getItem('userId'))
-      console.log('==================')
+      saveLoginSession(data, form.value.username)
       
       setTimeout(() => { router.push('/main') }, 600)
     } else {

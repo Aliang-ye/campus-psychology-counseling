@@ -45,7 +45,10 @@
             <span class="label">角色</span>
             <span class="value role" :class="`role-${me.role}`">{{ roleText(me.role) }}</span>
           </div>
-          <button @click="loadMe" class="btn-refresh">刷新</button>
+          <div class="info-actions">
+            <button @click="loadMe" class="btn-refresh">刷新</button>
+            <button @click="logout" class="btn-logout">退出登录</button>
+          </div>
         </div>
         <div v-else class="card-loading">
           <div class="spinner"></div>
@@ -96,6 +99,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { getLoginInfo, clearLoginSession } from '../session'
 
 const router = useRouter()
 const me = ref(null)
@@ -105,8 +109,9 @@ const newPassword = ref('')
 const msgMy = ref('')
 const msgAdmin = ref('')
 
-const username = sessionStorage.getItem('username')
-const role = sessionStorage.getItem('role')
+const loginInfo = getLoginInfo()
+const username = loginInfo ? loginInfo.username : ''
+const role = loginInfo ? loginInfo.role : ''
 
 const isDoctorOrAdmin = role === 'doctor' || role === 'admin'
 const isAdmin = role === 'admin'
@@ -115,6 +120,11 @@ const activeTab = ref('info')
 
 function goBack() {
   router.push('/main')
+}
+
+function logout() {
+  clearLoginSession()
+  router.push('/login')
 }
 
 onMounted(() => {
@@ -366,20 +376,34 @@ async function adminUpdateUser(u) {
   color: #e65100;
 }
 
-.btn-refresh {
-  width: 100%;
+.info-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.btn-refresh,
+.btn-logout {
+  flex: 1;
   padding: 10px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 8px;
 }
 
-.btn-refresh:hover {
+.btn-refresh {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.btn-logout {
+  background: linear-gradient(135deg, #ff8a80 0%, #ff5252 100%);
+}
+
+.btn-refresh:hover,
+.btn-logout:hover {
   transform: scale(1.02);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }

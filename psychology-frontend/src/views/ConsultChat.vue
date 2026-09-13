@@ -99,6 +99,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { wsUrl } from '../apiClient'
+import { getLoginInfo } from '../session'
 
 const router = useRouter()
 const pendingRequests = ref([])
@@ -117,29 +118,6 @@ const userRoleMap = ref({})
 
 function goBack() { router.push('/main') }
 function gotoConnect() { router.push('/consult/hall') }
-
-function getLoginInfo() {
-  try {
-    const userId = sessionStorage.getItem('userId')
-    const username = sessionStorage.getItem('username')
-    const role = sessionStorage.getItem('role')
-    const token = sessionStorage.getItem('token')
-    const tabId = sessionStorage.getItem('tabId')
-    
-    if (!userId || userId === 'undefined' || userId === 'null') return null
-    
-    return { 
-      userId: parseInt(userId), 
-      username: username || '', 
-      role: role || '', 
-      token: token || '', 
-      tabId: tabId || '' 
-    }
-  } catch (e) { 
-    console.error('getLoginInfo error:', e)
-    return null 
-  }
-}
 
 function formatTime(dateStr) {
   return new Date(dateStr).toLocaleTimeString()
