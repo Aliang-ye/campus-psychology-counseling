@@ -1,0 +1,49 @@
+spring:
+  config:
+    import: optional:classpath:application-local.yml
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:your_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 1000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:psychology-local-dev-jwt-secret-please-change-32b}
+    expire-hours: 24
+
+# 百度千帆大模型配置
+baidu:
+  qianfan:
+    # 认证模式：openai（OpenAI兼容） 或 iam（IAM原生）
+    mode: openai
+    # OpenAI 兼容模式的 API Key
+    openai-api-key: ${QIANFAN_API_KEY:your_qianfan_api_key}
+    # AppID（千帆控制台获取，可选）
+    app-id: ${QIANFAN_APP_ID:your_app_id}
+    # IAM认证：Access Key ID / Secret Access Key（保留以便切换）
+    access-key-id: ${QIANFAN_ACCESS_KEY:your_access_key}
+    secret-access-key: ${QIANFAN_SECRET_KEY:your_secret_key}
+    # v2 接口地址（两种模式共用）- 注意：baseUrl格式应以 / 结尾
+    model-url: https://qianfan.baidubce.com/v2/chat/completions
+    # 模型 ID - 使用官方示例中的模型
+    model-id: ernie-4.5-turbo-32k
+    # 最长输出token，增加至2048以支持完整回复
+    max-tokens: 2048
+    # 超时(ms) 增加至180s以支持更长的生成
+    timeout: 180000

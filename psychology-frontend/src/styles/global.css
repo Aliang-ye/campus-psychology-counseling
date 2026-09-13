@@ -1,0 +1,58 @@
+/* 轻度美化 — 全局样式 */
+:root{
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --primary:#1976d2;
+  --accent:#0ea5a4;
+  --radius:10px;
+  --gap:12px;
+  --maxWidth:1100px;
+}
+
+html,body,#app{
+  height:100%;
+}
+body{
+  margin:0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: linear-gradient(180deg, var(--bg) 0%, #eef2f6 100%);
+  color:#111827;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* container helper */
+.app-container{ max-width: var(--maxWidth); margin:28px auto; padding:20px; }
+.card{ background:var(--card); border-radius:var(--radius); box-shadow:0 6px 18px rgba(16,24,40,0.06); padding:18px; margin-bottom:18px }
+
+h2{ margin:0 0 12px 0; font-weight:700 }
+h3{ margin:0 0 8px 0 }
+
+/* forms */
+input,textarea,select{ padding:10px 12px; border-radius:8px; border:1px solid #e6e9ef; outline:none; transition:box-shadow .15s, border-color .12s }
+input:focus,textarea:focus,select:focus{ box-shadow:0 6px 14px rgba(25,118,210,0.08); border-color: rgba(25,118,210,0.35) }
+button{ background:var(--primary); color:white; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; transition:transform .06s ease, box-shadow .08s; box-shadow:0 6px 12px rgba(25,118,210,0.08) }
+button:hover{ transform:translateY(-1px) }
+button:active{ transform:translateY(0) }
+button.secondary{ background:transparent; color:var(--primary); border:1px solid rgba(25,118,210,0.12); box-shadow:none }
+
+/* smaller link-like buttons */
+.link-btn{ background:transparent; color:var(--primary); border:none; padding:6px 8px; cursor:pointer }
+.link-btn.danger{ color:#d14343 }
+
+/* lists */
+ul{ padding:0; margin:0; list-style:none }
+.results li, .pending-requests li, .sessions-area li{ display:flex; align-items:center; gap:12px; padding:8px 6px; border-bottom:1px solid #f1f5f9 }
+
+/* chat */
+.chat-area .messages{ max-height:360px; overflow:auto; padding:12px; display:flex; flex-direction:column; gap:8px }
+.msg{ max-width:78%; padding:10px 12px; border-radius:12px }
+.msg.me{ margin-left:auto; background:linear-gradient(90deg,#e6f4ff,#d9eeff) }
+.msg.them{ background:#fff }
+.meta{ font-size:0.78rem; color:var(--muted); margin-bottom:6px }
+
+.back-btn{ display:inline-block; padding:6px 10px; border-radius:8px; background:transparent; color:var(--primary); cursor:pointer }
+
+/* responsive */
+@media (max-width:720px){ .app-container{ padding:12px } .card{ padding:14px } }

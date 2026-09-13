@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:your_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 1000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:change-this-to-a-long-random-secret}
+    expire-hours: 24
+
+# 百度千帆大模型配置
+baidu:
+  qianfan:
+    mode: openai
+    openai-api-key: ${QIANFAN_API_KEY:your_qianfan_api_key}
+    app-id: ${QIANFAN_APP_ID:your_app_id}
+    access-key-id: ${QIANFAN_ACCESS_KEY:your_access_key}
+    secret-access-key: ${QIANFAN_SECRET_KEY:your_secret_key}
+    model-url: https://qianfan.baidubce.com/v2/chat/completions
+    model-id: ernie-4.5-turbo-32k
+    max-tokens: 2048
+    timeout: 180000
